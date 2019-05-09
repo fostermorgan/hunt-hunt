@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="col-8">
-          <div class="rounded-more footer" id="googleMap"></div>
+          <div class="rounded-more footer" id="map"></div>
         </div>
 
       </div>
@@ -45,12 +45,21 @@
 
     <script>
       function myMap() {
-      var mapProp= {
-        center:new google.maps.LatLng(51.508742,-0.120850),
-        zoom:5,
-      };
-      var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-    }
+        var mapProp= {
+          center:new google.maps.LatLng(51.508742,-0.120850),
+          zoom:5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+      }
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+      }
+
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs&callback=myMap"></script>
 
