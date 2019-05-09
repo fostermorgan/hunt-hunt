@@ -1,0 +1,21 @@
+<?php
+# loop through each tuple in our "pokemon" result set and produce a Bootstrap card for each.
+foreach ($user_tuples as $user) {
+  if($user['hired'] === '1'){?>
+    <?php
+      # we'll create a quick temporary variable for each called $favorite - used shortly to add the "favorite" class name where appropriate.
+      $username;
+      if(isset($_SESSION['username'])){$currentUser = $_SESSION['username'];}?>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" id="employee<?php echo $user['user_id']; ?>">
+        <div class="card mb-3 <?php if($favorite) { echo 'favorite'; } ?>">
+          <!-- note that every Pokedex image fits ./images/____.png, so all we need to insert to load the image is the appropriate number. -->
+          <img src="./images/employee<?php echo $user['user_id']; ?>.jpg" class="card-img-top" alt="Picture of <?php echo $user['name']; ?>">
+          <div class="card-body <?php if($user['username'] == $currentUser){ echo 'currentuser"';} ?>">
+            <h3 class="card-title"><?php echo $user['name']; ?></h3>
+            <h5 class="card-subtitle"><?php echo $user['title']; ?></h5>
+            <!-- the str_pad function here just lets us ensure that we always show three digits, even if the number is < 100. -->
+          </div>
+        </div>
+      </div>
+<?php }
+} ?>

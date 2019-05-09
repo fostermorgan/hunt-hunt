@@ -21,25 +21,23 @@
     <?php include 'nav.php' ?>
     <div class="container-fluid">
 
-      <div class="row">
-        <div class="footer col-4 ">
+      <div class="row footer">
+        <div class="col-4">
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Search</button>
           </form>
-          <div class="white">
-            Popular Areas:
+          <div class="white rounded-more">
+            <h5>Popular Areas: </h5>
 
-            <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Eau Claire</button>
-            <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Chippewa</button>
-            <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Search</button>
-            <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Search</button>
+            <button class="white btn my-2 my-sm-0 dark" type="submit">Eau Claire</button>
+            <button class="white btn my-2 my-sm-0 dark" type="submit">Chippewa</button>
+            <button class="white btn my-2 my-sm-0 dark" type="submit">Search</button>
+            <button class="white btn my-2 my-sm-0 dark" type="submit">Search</button>
           </div>
         </div>
         <div class="col-8">
-
           <div class="rounded-more footer" id="googleMap"></div>
-
         </div>
 
       </div>

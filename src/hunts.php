@@ -1,6 +1,21 @@
 <?php
-  $page = 'plan';
+  include_once "db_connection.php";
+  session_start();
+  $page = 'hunts';
 
+  $database = new Connection();
+  $conn = $database->openConnection();
+
+
+  $message = "";
+  $message_type = "";
+  /*
+  # grab all the users so we can populate the drop-downs on the page.
+  $statement = $conn->prepare("SELECT * FROM users;");
+  $statement->execute();
+  $user_tuples = $statement->fetchAll();
+
+  */
 
 
 
@@ -14,7 +29,7 @@
     <link rel="stylesheet" type="text/css" href="hunt.css">
 
 
-    <title>Hunt Hunt | Book</title>
+    <title>Hunt Hunt | Hunts</title>
   </head>
   <body>
 <!--color scheme hex codes:brown #663300	darkyellow #CC9900	dark green #333300	orange #CC6600 -->
@@ -23,9 +38,12 @@
     <div class="container-fluid">
 
       <div class="row">
-        <p>You're gunna book? </p>
 
-      </div>
+        <!-- display each successful hunt -->
+
+				
+
+			</div>
     </div>
 
 

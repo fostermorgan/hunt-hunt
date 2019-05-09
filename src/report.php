@@ -1,7 +1,18 @@
 <?php
+
+  include_once "db_connection.php";
+  session_start();
   $page = 'report';
 
+  $database = new Connection();
+  $conn = $database->openConnection();
 
+  # grab all the users so we can populate the drop-downs on the page.
+  // $statement = $conn->prepare("SELECT * FROM morganfk7676;");
+  // $statement->execute();
+  // $user_tuples = $statement->fetchAll();
+
+  $message = "";
 
 
 ?>
@@ -14,7 +25,7 @@
     <link rel="stylesheet" type="text/css" href="hunt.css">
 
 
-    <title>Hunt Hunt | Book</title>
+    <title>Hunt Hunt | Report</title>
   </head>
   <body>
 <!--color scheme hex codes:brown #663300	darkyellow #CC9900	dark green #333300	orange #CC6600 -->
@@ -23,7 +34,32 @@
     <div class="container-fluid">
 
       <div class="row">
-        <p>You're gunna book? </p>
+        <div class="col-12 col-lg-6">
+					<div class="jumbotron">
+						<h1 class="display-4">Landed a successful hunt?</h1>
+						<p class="lead">Submit your hunt here!</p>
+					</div>
+					<form method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="name">Full name</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="Foo Barrington">
+						</div>
+						<div class="form-group">
+							<label for="title">Desired title</label>
+							<input type="text" class="form-control" id="title" name="title" placeholder="CEO">
+						</div>
+						<div class="form-group">
+							<label for="photo">Recent photo (300x470, jpg format)</label>
+							<input type="file" class="form-control-file" id="photo" name="photo">
+						</div>
+						<div class="form-group pt-3 text-center">
+							<button type="submit" class="btn btn-dark" name="apply">Submit!</button>
+						</div>
+					</form>
+				</div>
+        <div class="col-12 col-lg-6 mb-3">
+					<img class="img-fluid rounded-more" alt="Man in suit pointing at camera" src="images/you.jpg"/>
+				</div>
 
       </div>
     </div>
