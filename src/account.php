@@ -1,48 +1,33 @@
+<?php
+  $page = 'account';
+
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="nav.html">
+    <link rel="stylesheet" type="text/css" href="hunt.css">
 
-    <title>Hunt Hunt</title>
-    <style>
-      h1{
-        text-align: center;
-      }
-    </style>
+
+    <title>Hunt Hunt | Book</title>
   </head>
   <body>
-<!--color scheme hex codes:brown663300	darkyellowCC9900	dark green333300	orangeCC6600 -->
+<!--color scheme hex codes:brown #663300	darkyellow #CC9900	dark green #333300	orange #CC6600 -->
 <!-- p5.js libraries? -->
-
+    <?php include 'nav.php' ?>
     <div class="container-fluid">
-      <h1>Welcome to Hunt Hunt</h1>
-        <?php include 'nav.php' ?>
-      <div class="row">
-        <div class="col-sm">
-          One of three columns
-        </div>
-        <div class="col-sm">
-          One of three columns
-          <div id="googleMap" style="width:100%;height:400px;"></div>
 
-        </div>
-        <div class="col-sm">
-          One of three columns
-        </div>
+      <div class="row">
+        <p>You're gunna book? </p>
+
       </div>
     </div>
 
-    <script>
-      function myMap() {
-      var mapProp= {
-        center:new google.maps.LatLng(51.508742,-0.120850),
-        zoom:5,
-      };
-      var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-    }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs&callback=myMap"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
