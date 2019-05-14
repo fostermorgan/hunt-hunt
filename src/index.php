@@ -1,9 +1,6 @@
 <?php
   $page = 'home';
 
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -20,46 +17,72 @@
 <!-- p5.js libraries? -->
     <?php include 'nav.php' ?>
     <div class="container-fluid">
+      <div class="card jumbotron col-12">
+        <h5>This is Hunt-Hunt...</h5>
+      </div>
 
-      <div class="row footer">
-        <div class="col-4">
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Search</button>
-          </form>
-          <div class="white rounded-more">
-            <h5>Popular Areas: </h5>
-
-            <button class="white btn my-2 my-sm-0 dark" type="submit">Eau Claire</button>
-            <button class="white btn my-2 my-sm-0 dark" type="submit">Chippewa</button>
-            <button class="white btn my-2 my-sm-0 dark" type="submit">Search</button>
-            <button class="white btn my-2 my-sm-0 dark" type="submit">Search</button>
+      <!-- bottom google map and search tool -->
+      <div class="row footer mx-auto">
+        <div class="card col-4">
+          <div class="card-header row">
+            <input id="address" class="form-control col-8" type="search" placeholder="Search" aria-label="Search">
+            <button id="searchMap" class="white font-weight-bold btn dark col-3 mx-auto" type="submit">Search</button>
+          </div>
+          <div class="card-body row">
+            <ul class="nav navbar-nav">
+              <li><button class="btn btn-primary">Eau Claire</button></li>
+              <li><button class="btn btn-basic">Chippewa</button></li>
+              <li><button class="btn btn-basic">Menominee</button></li>
+              <li><button class="btn btn-basic">La Crosse</button></li>
+            </ul>
           </div>
         </div>
+
         <div class="col-8">
-          <div class="rounded-more footer" id="map"></div>
+          <div class="card footer" id="map" style="width:100%; height:400px;"></div>
         </div>
+      </div>
+      <!-- <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="white font-weight-bold btn my-2 my-sm-0 dark" type="submit">Search</button>
+      </form>
+      <div class="white rounded-more">
+
+      </div> -->
+       <!-- <div class="row">
+         <div class="card col-4">
+
+         </div>
+       </div> -->
 
       </div>
-    </div>
-
     <script>
       function myMap() {
-        var mapProp= {
-          center:new google.maps.LatLng(51.508742,-0.120850),
-          zoom:5,
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-      }
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: 44.8113, lng: -91.4985}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('searchMap').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
         });
       }
 
-
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Search was not successful for the following reason: ' + status);
+          }
+        });
+      }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs&callback=myMap"></script>
 

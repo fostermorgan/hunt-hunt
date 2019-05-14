@@ -33,12 +33,15 @@
     <?php include 'nav.php' ?>
     <div class="container-fluid">
 
-      <div class="row">
-        <div class="col-12 col-lg-6">
-					<div class="jumbotron">
+      <div class="card row center green text-light mx-auto">
+        <!-- <div class="col-12 col-lg-12 yellow"> -->
+        <div class="col-12">
+
+					<div class="jumbotron text-dark">
 						<h1 class="display-4">Landed a successful hunt?</h1>
 						<p class="lead">Submit your hunt here!</p>
 					</div>
+
 					<form method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="name">Full name</label>

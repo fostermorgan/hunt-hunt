@@ -41,8 +41,6 @@
 
         <!-- display each successful hunt -->
 
-				
-
 			</div>
     </div>
 

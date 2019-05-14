@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark col" style="float: left">
   <!--color scheme hex codes:brown663300	darkyellowCC9900	dark green333300	orangeCC6600 -->
 
   <a class="navbar-brand" href="index.php">Hunt-Hunt</a>
@@ -14,10 +14,12 @@
       <li class="nav-item <?php if($page === "hunts"){ echo 'active';}?>">
         <a class="nav-link" href="hunts.php">Hunts</a>
       </li>
-      <li class="nav-item <?php if($page === "account"){ echo 'active';}?>">
+
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item <?php if($page === "account"){ echo 'active';}?>" style="float: right">
         <a class="nav-link" href="account.php">Account</a>
       </li>
     </ul>
-
   </div>
 </nav>

@@ -138,10 +138,10 @@
 				</div>
 			<?php } ?>
 
-			<div class="row">
-				<div class="col-12 col-lg-6">
-					<div class="jumbotron">
-						<h1 class="display-4">log in!</h1>
+			<div class="row card mx-auto">
+				<div class="col-12">
+					<div style="background:transparent !important" class="jumbotron">
+						<h1 class="display-4 yellow">log in!</h1>
 						<p class="lead text-center">Join us. Work. Join us. Work. Join us. Work. Join us. Work.</p>
 					</div>
 					<form method="post">
