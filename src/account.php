@@ -39,18 +39,20 @@
         <div id="jsErrorMessage" class="alert alert-<?php echo $message_type; ?>" role="alert"><?php echo $message; ?></div>
       <?php } ?>
 
-			<div class="row card mx-auto">
+			<div class="row mx-auto">
 
-				<div class="col-12">
-					<div style="background:transparent !important" class="jumbotron">
-						<h1 class="display-4"><?php echo $_SESSION['username']; ?>'s Profile!</h1>
-						<p class="lead text-center">View stats and change name here</p>
-					</div>
-				</div>
         <div class="col-12">
+          <div class="jumbotron yellow">
+            <h1 class="display-3 text-green"><?php echo $_SESSION['username']; ?>'s Profile!</h1>
+          </div>
+        </div>
+
           <?php
             $user_id = $_SESSION['user_id'];
-            $updateStatement = $conn->prepare("SELECT * FROM hunts WHERE user_id='$user_id';");
+            $updateStatement = $conn->prepare("SELECT * FROM hunts INNER JOIN users ON hunts.user_id=users.user_id
+                                          INNER JOIN animals ON hunts.animal_id = animals.animal_id
+                                            INNER JOIN locations ON hunts.location_id = locations.location_id
+                                              WHERE hunts.user_id='$user_id' ORDER BY huntDate DESC");
             $updateStatement->execute();
             $userHunts = $updateStatement->fetchAll();
             $nHunts = 0;
@@ -61,13 +63,58 @@
                 $nSuccess += 1;
               }
             }
-          ?>
-          <h4>Total number of hunts: <?php echo $nHunts; ?></h4>
-          <h4>Number of successful hunts: <?php echo $nSuccess; ?></h4>
-          <?php if($nHunts != 0){ ?><h4>Success Rate: <?php  echo $nSuccess/$nHunts *100 . '%'; ?></h4> <?php }?>
-          <h4>Favorite Location: </h4>
 
+            if($nHunts > 0){ ?>
+
+        <div class="col-12 card green text-light pt-3">
+
+          <table class="table text-light table-bordered">
+            <thead class="yellow text-dark">
+              <tr>
+                <th scope="col">Hunt</th>
+                <th scope="col">Date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Animal</th>
+                <th scope="col">Successful?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $count = 1;
+               foreach($userHunts as $hunt){
+                $success;
+                if($hunt['isSuccess'] == 'true'){
+                  $success = 'Yes';
+                }else{
+                  $success = 'No';
+                }
+
+                $dateToString = $hunt['huntDate'];
+                $dateSplit = explode("-", $dateToString);
+                $stringDate = $dateSplit[1] . '-' . $dateSplit[2] . '-' . $dateSplit[0];
+                $text = 'A' . $success . $hunt['animalName'] . ' hunt.'; ?>
+                <tr>
+                  <th scope="row"><?php echo $count; ?></th>
+                  <th ><?php echo $stringDate; ?></th>
+                  <td><?php echo $hunt['locationName']; ?></td>
+                  <td><?php echo $hunt['animalName']; ?></td>
+                  <td><?php echo $success ?></td>
+                </tr>
+
+              <?php $count++; }?>
+            </tbody>
+          </table>
         </div>
+        <h4 class="mt-3 mb-5">Hunt Success Rate: <?php  echo $nSuccess/$nHunts *100 . '%'; ?></h4>
+
+
+
+        <?php } else {?>
+        <div class="col-12 card green text-light pt-2 mb-5 ">
+          <h3 class="text-center">You have yet to register a hunt! Once you start registering, you can view your hunts and stats here.</h3>
+        </div>
+        <?php } ?>
+
 			</div>
     </div>
 

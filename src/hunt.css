@@ -1,5 +1,13 @@
+.textgreen{
+  color: #333300;
+}
+.yellowText{
+  color: #CC9900;
+}
 
-
+/* button .comment { display: none; }
+button:hover .replies {  }
+button:hover .comment { display: inline; } */
 
 .dateHunt {
     width: 25%;
@@ -57,7 +65,7 @@ body{
   background-color: #CC9900;
 }
 .orange{
-  background-color: #CC6600
+  background-color: #CC6600;
 }
 h1{
   text-align: center;

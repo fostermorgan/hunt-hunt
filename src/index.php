@@ -51,7 +51,7 @@
             <h1 class="display-3 text-center">Featured Stories</h1>
           </div>
         </div>
-        <div id="carouselExampleIndicators" class="carousel slide green mx-auto col-12 card" data-ride="carousel">
+        <div id="carouselExampleIndicators" class="carousel slide green col-12 rounded mx-auto" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -63,21 +63,21 @@
                 <h5>Bobby,</h5>
                 <p>Successful hunt in Eau Claire, WI.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more" src="images\hunt1.jpg" alt="First slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt1.jpg" alt="First slide" height="400">
             </div>
             <div class="carousel-item">
               <div class="d-none d-md-block text-center text-light pt-3">
                 <h5>Billy,</h5>
                 <p>Successful hunt in Eau Claire, WI.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more" src="images\hunt2.jpg" alt="Second slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt2.jpg" alt="Second slide" height="400">
             </div>
             <div class="carousel-item card green">
               <div class="d-none d-md-block text-center text-light pt-3">
                 <h5>Jessica,</h5>
                 <p>Successful hunt in Eau Claire, WI.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more" src="images\hunt9.jpg" alt="Third slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt9.jpg" alt="Third slide" height="400">
             </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -89,48 +89,50 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
-        <div class="col-12">
-          <div class="jumbotron yellow p-0 pt-3">
-            <h1 class="display-3 text-center">Recent Hunts</h1>
-          </div>
-          <div class="row">
-              <!-- Select each tuple and display in order of successful hunts in order of date in DB -->
-              <?php foreach($hunt_tuples as $hunt){
+        <div class="col-12 jumbotron yellow p-0 pt-3">
+          <h1 class="display-3 text-center">Recent Hunts</h1>
+        </div>
+        <div class="col-12 card green text-light pt-3 mb-5">
+
+          <table class="table text-light table-bordered">
+            <thead class="yellow text-dark">
+              <tr>
+                <th scope="col">Hunt</th>
+                <th scope="col">Date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Animal</th>
+                <th scope="col">Successful?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $count = 1;
+               foreach($hunt_tuples as $hunt){
                 $success;
                 if($hunt['isSuccess'] == 'true'){
-                  $success = ' successful ';
+                  $success = 'Yes';
                 }else{
-                  $success = 'n unsuccessful ';
+                  $success = 'No';
                 }
 
                 $dateToString = $hunt['huntDate'];
                 $dateSplit = explode("-", $dateToString);
                 $stringDate = $dateSplit[1] . '-' . $dateSplit[2] . '-' . $dateSplit[0];
                 $text = 'A' . $success . $hunt['animalName'] . ' hunt.'; ?>
-                <div class='text-center col-4'>
-                  <h1><?php echo $stringDate; ?></h1>
-                </div>
-                <div class='col-4'>
-                  <h1 class='text-center'>------</h1>
-                </div>
-                <div class='text-center col-4'>
-                  <h5><?php echo $text; ?></h5>
-                  <h6><?php echo $hunt['locationName']; ?> </h6>
-                </br>
-              </br>
+                <tr>
+                  <th scope="row"><?php echo $count; ?></th>
+                  <th ><?php echo $stringDate; ?></th>
+                  <td><?php echo $hunt['locationName']; ?></td>
+                  <td><?php echo $hunt['animalName']; ?></td>
+                  <td><?php echo $success ?></td>
+                </tr>
 
-                </div>
-              <?php }?>
-            </div>
+              <?php $count++; }?>
+            </tbody>
+          </table>
         </div>
       <!-- bottom google map and search tool -->
       </div>
-      <footer>
-        <div class="text-center" style="float:center;">
-          <a>Hunt Hunt | by Foster Morgan</a>
-        </div>
-        <div class="clearfix"></div>
-      </footer>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs&callback=myMap"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>

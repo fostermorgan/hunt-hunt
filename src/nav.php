@@ -18,12 +18,13 @@
       </li>
       <!-- TODO add functionality where you can view your hunts-> maybe new tab or just in hunt.php -->
 
+
     </ul>
     <div>
       <ul class="navbar-nav navbar-right">
         <li class="dropdown">
           <a href="" class="dropdown-toggle text-light" data-toggle="dropdown"><b><?php if(isset($_SESSION['username'])){echo $_SESSION['username'];}else{echo 'Login';} ?></b>&nbsp;<span class="caret"></span></a>
-          <ul class="dropdown-menu p-3 m-3">
+          <ul class="dropdown-menu dropdown-menu-right modal-xl pr-3 pl-3 m-0 " style="min-width: 200px;">
             <?php include 'loginModal.php' ?>
           </ul>
         </li>

@@ -137,11 +137,10 @@
             <input type="text" class="form-control" id="name" name="name" placeholder="First Last">
           </div> -->
 
-
                   <?php if(isset($_SESSION['username'])){ ?>
-                    <li id="logout">
+                    <li id="logout" class="mx-auto mr-auto">
                       <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 mx-auto mr-auto">
                           <form method="post">
                             <div class="form-group">
                               <button type="submit" name="profile" class="btn btn-primary btn-block btn-dark">My Profile</button>
@@ -153,9 +152,10 @@
                     </li>
                   <?php } else {?>
                   <li id="login">
-                    <div class="row">
+                    <div class="row pb-0 mb-0">
                       <div class="col-lg-12">
                         <form method="post">
+                          <!-- // class='px-4 py-3'> -->
                           <div class="form-group">
             								<label for="username">Username</label>
             								<input type="text" class="form-control" id="username" name="username" placeholder="Enter username">

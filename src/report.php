@@ -19,17 +19,21 @@
   $message1 = "";
   $message_type1 = "";
 
+  $statement = $conn->prepare("SELECT * FROM animals;");
+  $statement->execute();
+  $animal_tuples = $statement->fetchAll();
+
   function verifyHuntForm(){
     global $message1;
 
     if($_POST['date'] == ""){
       $message1 = 'You must select a date.';
 			return false;
-		}else if($_POST['locationDropdown'] == '' && $_POST['locationSearch'] == ''){
-      $message1 = "You must input a location.";
+		}else if($_POST['locationDropdown'] == ''){
+      $message1 = "You must select a location.";
 			return false;
-    }else if($_POST['animal'] == ''){
-      $message1 = "You must input an animal.";
+    }else if($_POST['animalDropdown'] == ''){
+      $message1 = "You must select an animal.";
 			return false;
     }
 
@@ -48,35 +52,10 @@
     $result = $updateStatement->fetch();
     $user_id = $result['user_id'];
 
-    // if(photo is not empty){//wont need since no photo attribute
-    //   $photo = 'images/hunt'. $_SESSION['hunt_id'];
-    // }
-    //derive location id from POST data to insert into the hunts table
-    //if they added a new location, add it to the locations table
-    $location_id;
-    if($_POST['locationSearch'] != ''){
-      //add new location to database
-      $statement = $conn->prepare("INSERT INTO locations (locationName) VALUES (:locationName);");
-      $statement->bindValue(":locationName",$_POST['locationSearch']);
-      $statement->execute();
-      $location_name = $_POST['locationSearch'];
 
-      //pull that location_id of the new location added
-      $updateStatement = $conn->prepare("SELECT location_id FROM locations WHERE locationName='$location_name'");
-      $updateStatement->execute();
-      $result = $updateStatement->fetch();
-      $location_id = (int)$result['location_id'];
-    }else{
-      $location_id = substr($_POST['locationDropdown'], 8);
-    }
+    $location_id = substr($_POST['locationDropdown'], 8);
 
-
-    //derive animal id from POST data to insert into the hunts table
-    $animal_name = $_POST['animal'];
-    $statment = $conn->prepare("SELECT animal_id FROM animals WHERE animalName='$animal_name'");
-    $statment->execute();
-    $result = $statment->fetch();
-    $animal_id = (int)$result['animal_id'];
+    $animal_id = substr($_POST['animalDropdown'], 6);
 
     if(isset($_POST['isSuccess'])){
       $isSuccess = 'true';
@@ -111,18 +90,49 @@
     }
     return true;
 
-  }//add a trigger so when user adds hunt, incrments nHunts for that user
+  }
 
   if(isset($_POST['addHunt'])){
-    if(verifyHuntForm() && verifyLocation()){
+    if(verifyHuntForm()){
       addHunt();
       $message1 = "Hunt has been successfully added!";
       $message_type1 = "success";
-      // header("Location: hunts.php");
+      header("Location: hunts.php");
     }else {
       $message_type1 = "danger";
     }
   }
+
+  if(isset($_POST['addLocation'])){
+    if(verifyLocation()){
+      //add new location to database
+      $statement = $conn->prepare("INSERT INTO locations (locationName) VALUES (:locationName);");
+      $statement->bindValue(":locationName",$_POST['locationSearch']);
+      $statement->execute();
+      //set message
+      $message1 = "Location has been successfully added!";
+      $message_type1 = "success";
+    }else {
+      $message_type1 = "danger";
+    }
+  }
+
+  if(isset($_POST['addAnimal'])){
+    if($_POST['animalSearch'] !== ''){
+      //add animal to database
+      $statement = $conn->prepare("INSERT INTO animals (animalName) VALUES (:animalName);");
+      $statement->bindValue(":animalName",$_POST['animalSearch']);
+      $statement->execute();
+      //set message
+      $message1 = "Animal has been successfully added!";
+      $message_type1 = "success";
+
+    }else {
+      $message1 = "Please type in an animal!";
+      $message_type1 = "danger";
+    }
+  }
+
   function verifyLocation(){
     global $conn;
     global $message1;
@@ -142,13 +152,16 @@
         array_push($distArray, str_replace(',', '', $details['rows'][0]['elements'][0]['distance']['text']));
       }
       foreach($distArray as $dist){
-        if($dist < 20){
+        if($dist <= 2){
             $message1 =  "Location is close to a previously added location. Select one from the dropdown menu.";
             return false;
         }
       }
+      return true;
+    }else{
+      $message1 =  "Please type in a location. ";
+      return false;
     }
-    return true;
   }
 
 
@@ -183,23 +196,24 @@
       <div class="row">
         <!-- <div class="col-12 col-lg-12 yellow"> -->
         <div class="col-12">
-
-					<div class="jumbotron text-dark mt-1 white">
-						<h1 id='jumbo' class="display-4">Landed a successful hunt?</h1>
-						<p class="lead text-center">Submit your hunt here!</p>
-					</div>
+          <div class="jumbotron yellow">
+            <h1 class="display-3 text-green">Landed a successful hunt?</h1>
+						<h3 class="text-center text-green">Submit your hunt here!</h3>
+          </div>
         </div>
+      </div>
 
-        <div class="col-12">
+        <div class="col-12 card m-3 p-3 pb-0 mb-0 mx-auto green">
 					<form method="post" enctype="multipart/form-data">
             <div class="row">
-  						<div class="form-group col-3">
-  							<label for="date">Date</label>
+  						<div class="form-group col-12 col-lg-3">
+  							<label for="date" class="text-light">Date</label>
   							<input type="date" class="form-control" id="date" name="date" placeholder="mm-dd-yyyy">
   						</div>
-              <div class="form-group col-3">
-                <label for="locationDropdown">Select a Location: </label>
-                <select style="width: auto; margin: auto;" class="form-control float-left" name="locationDropdown">
+
+              <div class="form-group col-12 col-lg-3">
+                <label for="locationDropdown" class="text-light">Select a Location: </label> <br>
+                <select style="width: auto; margin: auto;" class="form-control float-left mr-0" name="locationDropdown">
                   <option value=""></option>
                   <?php
     							foreach($location_tuples as $location){ ?>
@@ -207,35 +221,112 @@
     							<?php } ?>
     						</select>
               </div>
-              <div class="form-group col-4">
-  							<label for="location">Or type it in here...</label>
-  							<input type="text" class="form-control" id="location" name="locationSearch" placeholder="[city, state]">
+              <!-- AddLocations button to trigger modal -->
+              <div class="form-group col-12 col-lg-2">
+  							<label for="location" class="text-light">Don't see it?</label>
+  							<button type="button" class="form-control green btn btn-light yellowText" id="location" name="locationSearch" data-toggle="modal" data-target="#addLocation" >Add Location</button>
   						</div>
-              <!-- TODO://make animal a dropdown of all avaible animals in the database -->
-              <div class="form-group col-4">
-  							<label for="animal">Animal</label>
-  							<input type="text" class="form-control" id="animal" name="animal" placeholder="Deer">
+
+              <div class="form-group col-12 col-lg-2">
+                <label for="animalDropdown" class="text-light">Select an Animal: </label>  <br>
+                <select style="width: auto; margin: auto;" class="form-control float-left" name="animalDropdown">
+                  <option value=""></option>
+                  <?php
+    							foreach($animal_tuples as $animal){ ?>
+                    <option value="animal<?php echo $animal["animal_id"]; ?>"><?php echo $animal["animalName"]; ?></option>
+    							<?php } ?>
+    						</select>
+              </div>
+              <div class="form-group col-12 col-lg-2">
+  							<label for="animalSearch" class="text-light">Don't see it?</label>
+  							<button type="button" class="form-control green btn btn-light yellowText" id="animalSearch" name="animalSearch" data-toggle="modal" data-target="#addAnimal">Add Animal</button>
   						</div>
-              <div class="form-group col-1">
-                <label for="isSuccess">Was it a success?</label>
-                <input type="checkbox" class="form-control-file" id="isSuccess" name="isSuccess">
+
+              <div class="form-group col-12 col-lg-4">
+  							<label for="photo" class="text-light">Have a photo of your hunt? Upload it here.</label>
+  							<input type="file" class="form-control-file text-light" id="photo" name="photo">
+  						</div>
+
+              <div class="form-check ml-3 col-md-6 col-lg-3 pt-3 pr-5 mr-5">
+                <input type="checkbox" class="form-check-input" id="isSuccess" name="isSuccess">
+                <label for="isSuccess" class="text-light">Was it a success?</label>
               </div>
               <!-- TODO //ask if anmial isn't on there and they would like to add it -->
-  						<div class="form-group col-9">
-  							<label for="photo">Have a photo of your hunt? Upload it here.</label>
-  							<input type="file" class="form-control-file" id="photo" name="photo">
-  						</div>
+              <div class="form-group ml-5 pt-5 col-6 col-sm-6 col-md-6 col-lg-3 text-right">
+                <button type="submit" class="btn btn-light text-dark yellow" name="addHunt">Submit!</button>
+              </div>
+
             </div>
 
-            <div class="form-group pt-3 text-center">
-              <button type="submit" class="btn btn-dark" name="addHunt">Submit!</button>
-            </div>
+
 					</form>
-				</div>
       </div>
     </div>
+    </div>
+    <!-- Add Locations Modal -->
+    <div class="modal fade" id="addLocation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Location</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="post">
+            <div class="modal-body col-12">
+  							<label for="locationSearch">Location Name: </label>
+  							<input type="text" class="form-control-file locationSearch" id="locationSearch" name="locationSearch">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-light text-dark yellow" name="addLocation">Add Location</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <!-- Add Animal Modal -->
+    <div class="modal fade" id="addAnimal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Animal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="post">
+            <div class="modal-body col-12">
+  							<label for="animalSearch">Animal Name: </label>
+  							<input type="text" class="form-control-file animalSearch" id="animalSearch" name="animalSearch">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-light text-dark yellow animalSubmit" name="addAnimal">Add Animal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+    //on dismall of modals, clear the values
+    $('#addAnimal').on('hidden.bs.modal', function () {
+      // location.reload();
+      $('.animalSearch').val("");
+    });
+    $('#addLocation').on('hidden.bs.modal', function () {
+      $('.locationSearch').val("");
+    });
+
+    </script>
   </body>
 </html>
