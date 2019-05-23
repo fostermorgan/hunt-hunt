@@ -60,24 +60,24 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               <div class="d-none d-md-block text-center text-light pt-3">
-                <h5>Bobby,</h5>
-                <p>Successful hunt in Eau Claire, WI.</p>
+                <h5>Joe,</h5>
+                <p>Successful hunt in Wausau, WI.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt1.jpg" alt="First slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt59.jpg" alt="First slide" height="400">
             </div>
             <div class="carousel-item">
               <div class="d-none d-md-block text-center text-light pt-3">
-                <h5>Billy,</h5>
-                <p>Successful hunt in Eau Claire, WI.</p>
+                <h5>Bobby,</h5>
+                <p>Successful hunt in St. Paul, MN.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt2.jpg" alt="Second slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt56.jpg" alt="Second slide" height="400">
             </div>
             <div class="carousel-item card green">
               <div class="d-none d-md-block text-center text-light pt-3">
-                <h5>Jessica,</h5>
-                <p>Successful hunt in Eau Claire, WI.</p>
+                <h5>Billy,</h5>
+                <p>Successful hunt in Indiantown, FL.</p>
               </div>
-              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt9.jpg" alt="Third slide" height="400">
+              <img class="d-block w-300 mx-auto card mb-3 rounded-more mt-3" src="images\hunt53.jpg" alt="Third slide" height="400">
             </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -131,7 +131,6 @@
             </tbody>
           </table>
         </div>
-      <!-- bottom google map and search tool -->
       </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs&callback=myMap"></script>

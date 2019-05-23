@@ -7,10 +7,6 @@
   $database = new Connection();
   $conn = $database->openConnection();
 
-  $lat;
-  $long;
-  $locationName;
-
   # grab all the users so we can populate the drop-downs on the page.
   $statement = $conn->prepare("SELECT * FROM users;");
   $statement->execute();
@@ -125,13 +121,20 @@
       $message_type1 = "danger";
     }
   }
-
   if(isset($_POST['addLocation'])){
-    global $lat;
-    global $long;
-    global $locationName;
-
     if(verifyLocation()){
+      header("Location:report.php");
+      //search for coordinates to record into database
+      $locationAddress =  str_replace(' ', '', $_POST['locationSearch']);
+      $coords = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $locationAddress . "&key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs";
+      $json = file_get_contents($coords);
+      echo $coords;
+
+      $coords = json_decode($json, TRUE);
+      $lat = $coords['results'][0]['geometry']['location']['lat'];
+      $long = $coords['results'][0]['geometry']['location']['lng'];
+      // $locationName = $coords['results'][0]['address_components'][0]['long_name'] . ', ' . $coords['results'][0]['address_components'][3]['long_name'];
+      $locationName = $coords['results'][0]['formatted_address'];
       //add new location to database
       $statement = $conn->prepare("INSERT INTO locations (locationName,longitude,latitude) VALUES (:locationName,:longitude,:latitude);");
       $statement->bindValue(":locationName",$locationName);
@@ -141,6 +144,9 @@
       //set message
       $message1 = "Location has been successfully added!";
       $message_type1 = "success";
+      // echo "<script type='text/javascript'>alert('$message');</script>";
+      echo "<script type='text/javascript'>alert(\"<div class='alert alert-success'>'$message1'</div>\")</script>";
+
     }else {
       $message_type1 = "danger";
     }
@@ -148,6 +154,7 @@
 
   if(isset($_POST['addAnimal'])){
     if(verifyAnimal()){
+      header("Location:report.php");
       //add animal to database
       $statement = $conn->prepare("INSERT INTO animals (animalName) VALUES (:animalName);");
       $statement->bindValue(":animalName",$_POST['animalSearch']);
@@ -162,14 +169,10 @@
   function verifyLocation(){
     global $conn;
     global $message1;
-    global $lat;
-    global $long;
-    global $locationName;
     $distArray = array();
     $updateStatement = $conn->prepare("SELECT * FROM locations;");
     $updateStatement->execute();
     $location_tuples = $updateStatement->fetchAll();
-    $locationAddress;
 
     if($_POST['locationSearch'] !== ''){// if the location they enter is within 20 miles of a different location, prompt them to use a dropdown
 
@@ -183,17 +186,6 @@
 
         array_push($distArray, str_replace(',', '', $details['rows'][0]['elements'][0]['distance']['text']));
       }
-      if($locationAddress != ''){
-        $coords = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $locationAddress . "&key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs";
-        $json = file_get_contents($coords);
-        $coords = json_decode($json, TRUE);
-        $lat = $coords['results'][0]['geometry']['location']['lat'];
-        $long = $coords['results'][0]['geometry']['location']['lng'];
-        $locationName = $coords['results'][0]['address_components'][0]['long_name'] . ', ' . $coords['results'][0]['address_components'][2]['long_name'];
-        // echo "lat: " . $lat . " Long: " . $long . " Location Name: " . $locationName;
-
-      }
-
       foreach($distArray as $dist){
         if($dist <= 2){
             $message1 =  "Location is close to a previously added location. Select one from the dropdown menu.";
@@ -363,7 +355,6 @@
     <script>
     //on dismall of modals, clear the values
     $('#addAnimal').on('hidden.bs.modal', function () {
-      // location.reload();
       $('.animalSearch').val("");
     });
     $('#addLocation').on('hidden.bs.modal', function () {

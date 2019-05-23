@@ -112,7 +112,6 @@
             </div>
 					</form>
         </div>
-        <!-- TODO if time add lcoation filter? -->
       <?php if($view == 'huntView') { ?>
         <div class="row">
           <!-- display each successful hunt -->
@@ -124,8 +123,8 @@
                 $stringDate = $dateSplit[1] . '-' . $dateSplit[2] . '-' . $dateSplit[0];
     					    if(isset($_SESSION['username'])){$currentUserID = $_SESSION['user_id'];} ?>
     							<div class="col-12 col-sm-6 col-md-6 col-lg-5 col-xl-4 mt-3 pt-3 pb-3" id="hunt<?php echo $hunt['hunt_id']; ?>">
-    								<div class="card mb-3 green <?php if($favorite) { echo 'favorite'; } ?>">
-    									<img src="./images/hunt<?php echo $hunt['hunt_id']; ?>.jpg" class="d-block w-300 mx-auto m-3 rounded-more img-fluid pl-3 pr-3" alt="Picture of <?php echo $hunt['user_id']; ?>">
+    								<div class="card mb-3 green">
+    									<img src="images/hunt<?php echo $hunt['hunt_id']; ?>.jpg" class="d-block w-300 mx-auto m-3 rounded-more img-fluid pl-3 pr-3" alt="Picture of <?php echo $hunt['user_id']; ?>">
     									<div class="card-body pl-0 ml-0 pr-0 mr-0 text-light green ">
                         <h6 class="card-subtitle float-left pl-3"><?php echo $stringDate; ?></h6>
                         <h6 class="card-subtitle float-right pr-3"><?php echo $hunt['locationName']; ?></h6>
@@ -174,16 +173,12 @@
       var buffer = 0;
     	Array.prototype.forEach.call(allData, function(data){
     		var content = document.createElement('div');
+        content.style.cssText = 'text-align: center; font-weight: bold;';
         var br = document.createElement('br');
-    		var animalName = document.createElement('strong');
-        var locationName = document.createElement('strong');
+    		var animalName = document.createTextNode(data.animalName + " in " + data.locationName);
 
-
-    		animalName.textContent = data.animalName + " in ";
-        locationName.textContent = data.locationName;
     		content.appendChild(animalName);
         content.appendChild(br);
-        content.appendChild(locationName);
 
         var hunt_id = data.hunt_id;
     		var img = document.createElement('img');
