@@ -15,14 +15,6 @@
   $message = "";
   $message_type = "";
 
-  function updateName(){//have an option under accounts tab/user settings
-    if(isset($_POST['name'])){
-      $name = $_POST['name'];
-      $updateStatement = $conn->prepare("UPDATE users SET name='$name' WHERE username='$username'");
-      $updateStatement->execute();
-    }
-  }
-
   function addNewUser(){
     global $conn;
     global $message;

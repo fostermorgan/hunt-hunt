@@ -7,6 +7,10 @@
   $database = new Connection();
   $conn = $database->openConnection();
 
+  $lat;
+  $long;
+  $locationName;
+
   # grab all the users so we can populate the drop-downs on the page.
   $statement = $conn->prepare("SELECT * FROM users;");
   $statement->execute();
@@ -38,6 +42,25 @@
     }
 
 		return true;
+  }
+  function verifyAnimal(){
+    global $message1;
+    global $message_type1;
+    global $animal_tuples;
+
+    if($_POST['animalSearch'] == '') {
+      $message1 = "Please type in an animal!";
+      $message_type1 = "danger";
+      return false;
+    }
+    foreach($animal_tuples as $animal){
+      if($animal['animalName'] == $_POST['animalSearch']){
+        $message1 = "Animal already exists, please select it from the dropdown menu.";
+        $message_type1 = "danger";
+        return false;
+      }
+    }
+    return true;
   }
 
   function addHunt(){
@@ -104,10 +127,16 @@
   }
 
   if(isset($_POST['addLocation'])){
+    global $lat;
+    global $long;
+    global $locationName;
+
     if(verifyLocation()){
       //add new location to database
-      $statement = $conn->prepare("INSERT INTO locations (locationName) VALUES (:locationName);");
-      $statement->bindValue(":locationName",$_POST['locationSearch']);
+      $statement = $conn->prepare("INSERT INTO locations (locationName,longitude,latitude) VALUES (:locationName,:longitude,:latitude);");
+      $statement->bindValue(":locationName",$locationName);
+      $statement->bindValue(":longitude",$long);
+      $statement->bindValue(":latitude",$lat);
       $statement->execute();
       //set message
       $message1 = "Location has been successfully added!";
@@ -118,7 +147,7 @@
   }
 
   if(isset($_POST['addAnimal'])){
-    if($_POST['animalSearch'] !== ''){
+    if(verifyAnimal()){
       //add animal to database
       $statement = $conn->prepare("INSERT INTO animals (animalName) VALUES (:animalName);");
       $statement->bindValue(":animalName",$_POST['animalSearch']);
@@ -127,30 +156,44 @@
       $message1 = "Animal has been successfully added!";
       $message_type1 = "success";
 
-    }else {
-      $message1 = "Please type in an animal!";
-      $message_type1 = "danger";
     }
   }
 
   function verifyLocation(){
     global $conn;
     global $message1;
+    global $lat;
+    global $long;
+    global $locationName;
     $distArray = array();
     $updateStatement = $conn->prepare("SELECT * FROM locations;");
     $updateStatement->execute();
     $location_tuples = $updateStatement->fetchAll();
+    $locationAddress;
+
     if($_POST['locationSearch'] !== ''){// if the location they enter is within 20 miles of a different location, prompt them to use a dropdown
 
      foreach($location_tuples as $location){
         $dest1 =  str_replace(' ', '', $location['locationName']);
         $dest2 = str_replace(' ', '', $_POST['locationSearch']);
+        $locationAddress =  str_replace(' ', '', $_POST['locationSearch']);
         $details = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" . $dest1 . "&destinations=" . $dest2 . "&key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs";
         $json = file_get_contents($details);
         $details = json_decode($json, TRUE);
 
         array_push($distArray, str_replace(',', '', $details['rows'][0]['elements'][0]['distance']['text']));
       }
+      if($locationAddress != ''){
+        $coords = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $locationAddress . "&key=AIzaSyAL2wti_wS8G_3VMWmLuV7Ih2MZZu7ZErs";
+        $json = file_get_contents($coords);
+        $coords = json_decode($json, TRUE);
+        $lat = $coords['results'][0]['geometry']['location']['lat'];
+        $long = $coords['results'][0]['geometry']['location']['lng'];
+        $locationName = $coords['results'][0]['address_components'][0]['long_name'] . ', ' . $coords['results'][0]['address_components'][2]['long_name'];
+        // echo "lat: " . $lat . " Long: " . $long . " Location Name: " . $locationName;
+
+      }
+
       foreach($distArray as $dist){
         if($dist <= 2){
             $message1 =  "Location is close to a previously added location. Select one from the dropdown menu.";

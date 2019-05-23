@@ -5,9 +5,9 @@
   color: #CC9900;
 }
 
-/* button .comment { display: none; }
-button:hover .replies {  }
-button:hover .comment { display: inline; } */
+#data, #allData {
+  display: none;
+}
 
 .dateHunt {
     width: 25%;
