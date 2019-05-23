@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2019 at 08:34 AM
+-- Generation Time: May 23, 2019 at 08:55 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `morganfk`
 --
+CREATE DATABASE IF NOT EXISTS `morganfk` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `morganfk`;
 
 -- --------------------------------------------------------
 
