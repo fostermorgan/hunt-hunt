@@ -21,8 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `morganfk`
 --
-CREATE DATABASE IF NOT EXISTS `morganfk` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `morganfk`;
+-- CREATE DATABASE IF NOT EXISTS `u700389323_morganfk` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `u700389323_morganfk`;
 
 -- --------------------------------------------------------
 
